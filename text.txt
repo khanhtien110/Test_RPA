@@ -1,0 +1,52 @@
+Sub Filter_Payment(path_file As String, path_file_filter As String)
+    Dim todayDate As Date, yesterday As Date
+    todayDate = Date
+
+    Dim wb As Workbook, newWb As Workbook
+    Dim ws As Worksheet, newWs As Worksheet
+    Dim lastRow As Long
+    Dim rng As Range, cell As Range
+    Dim dict As Object
+    
+    On Error Resume Next
+        Set wb = Workbooks.Open(path_file)
+        If wb Is Nothing Then
+            MsgBox "Error: Unable to open file - " & path_file, vbCritical
+            Exit Sub
+        End If
+    On Error GoTo 0
+    Set ws = wb.Sheets("Sheet1")
+    
+    lastRow = ws.Cells(ws.Rows.Count, "N").End(xlUp).Row
+    If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
+    
+    On Error Resume Next
+        ws.Range("A1:N" & lastRow).AutoFilter Field:=7, Criteria1:="<" & Date, Operator:=xlAnd
+        ws.Range("A1:N" & lastRow).AutoFilter Field:=14, Criteria1:="<0"
+        Set rng = ws.UsedRange.SpecialCells(xlCellTypeVisible)
+    On Error GoTo 0
+    
+    If rng Is Nothing Then
+        MsgBox "No matching data found.", vbExclamation
+        wb.Close False
+        Exit Sub
+    End If
+    
+    'Save new file after filter
+    Set newWb = Workbooks.Add
+    Set newWs = newWb.Sheets(1)
+    rng.Copy
+    newWs.Range("A1").PasteSpecial Paste:=xlPasteValues
+    newWs.Range("A1").PasteSpecial Paste:=xlPasteFormats
+    newWs.Cells.EntireColumn.AutoFit
+    'Set path for new file after filter
+    
+    If Dir(path_file_filter) <> "" Then
+        Kill path_file_filter ' Delete existing file
+    End If
+    
+    newWb.SaveAs path_file_filter, FileFormat:=xlOpenXMLWorkbook
+    newWb.Close False
+    wb.Close False
+    
+End Sub
