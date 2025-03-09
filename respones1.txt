@@ -1,0 +1,30 @@
+Sub FilterDocumentDate()
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim filterDate As Date
+    Dim documentDate As Date
+    
+    ' Thiết lập sheet và ngày lọc
+    Set ws = ThisWorkbook.Sheets("Sheet1") 
+    filterDate = DateSerial(2024, 12, 31)
+    
+    ' Tìm số dòng cuối cùng trong sheet
+    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row 
+    
+    ' Duyệt qua tất cả các dòng để kiểm tra Document Date
+    For i = 2 To lastRow 
+        ' Kiểm tra nếu cột Document Date nhỏ hơn 31/12/2024
+        On Error Resume Next
+        documentDate = CDate(ws.Cells(i, "E").Value)
+        On Error GoTo 0
+        
+        If documentDate < filterDate Then
+            ws.Rows(i).Hidden = False
+        Else
+            ws.Rows(i).Hidden = True 
+        End If
+    Next i
+    
+    MsgBox "Đã lọc các dòng có Document Date < 31/12/2024."
+End Sub

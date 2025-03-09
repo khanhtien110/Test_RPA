@@ -1,0 +1,90 @@
+Sub SplitDataByCustomer()
+    On Error GoTo ErrorHandler
+    
+    Dim ws As Worksheet
+    Dim data As Variant
+    Dim headers As Variant
+    Dim customerIndex As Integer
+    Dim customerData As Object
+    Dim customerName As String
+    Dim i As Long, j As Long
+    Dim newWorkbook As Workbook
+    Dim newSheet As Worksheet
+    Dim today As String
+    Dim fileName As String
+    Dim folderPath As String
+    
+    ' Lấy sheet và dữ liệu từ sheet hiện tại
+    Set ws = ThisWorkbook.Sheets("Sheet1")
+    data = ws.UsedRange.Value
+    headers = Application.Index(data, 1, 0)  ' Tiêu đề cột
+    
+    ' Tìm chỉ số cột "Customer number+name"
+    customerIndex = -1
+    For i = 1 To UBound(headers, 2)
+        If headers(1, i) = "Customer number+name" Then
+            customerIndex = i
+            Exit For
+        End If
+    Next i
+    
+    If customerIndex = -1 Then
+        MsgBox "Không tìm thấy cột 'Customer number+name'"
+        Exit Sub
+    End If
+    
+    ' Tạo đối tượng Dictionary để lưu trữ dữ liệu theo Customer
+    Set customerData = CreateObject("Scripting.Dictionary")
+    
+    ' Duyệt qua dữ liệu và phân loại theo Customer number+name
+    For i = 2 To UBound(data, 1)
+        customerName = data(i, customerIndex)
+        
+        If Not customerData.Exists(customerName) Then
+            customerData.Add customerName, New Collection
+        End If
+        
+        customerData(customerName).Add Application.Index(data, i, 0)
+    Next i
+    
+    ' Lấy ngày hôm nay
+    today = Format(Now, "yyyy-mm-dd")
+    
+    ' Tạo thư mục để lưu các file mới (thư mục hiện tại)
+    folderPath = ThisWorkbook.Path & "\"
+    
+    ' Tạo file mới cho mỗi Customer
+    For Each customerName In customerData.Keys
+        ' Tạo một workbook mới cho mỗi customer
+        Set newWorkbook = Workbooks.Add
+        Set newSheet = newWorkbook.Sheets(1)
+        
+        ' Thêm tiêu đề vào sheet mới
+        For i = 1 To UBound(headers, 2)
+            newSheet.Cells(1, i).Value = headers(1, i)
+        Next i
+        
+        ' Thêm dữ liệu của customer vào sheet mới
+        j = 2  ' Dòng bắt đầu thêm dữ liệu
+        For Each item In customerData(customerName)
+            For i = 1 To UBound(item, 2)
+                newSheet.Cells(j, i).Value = item(1, i)
+            Next i
+            j = j + 1
+        Next item
+        
+        ' Lưu file với tên là Customer_number_name_date.xlsx
+        fileName = folderPath & customerName & "_" & today & ".xlsx"
+        newWorkbook.SaveAs fileName, xlOpenXMLWorkbook
+        
+        ' Đóng file sau khi lưu
+        newWorkbook.Close False
+        
+        Debug.Print "Đã tạo file mới cho customer: " & customerName
+    Next customerName
+    
+    Exit Sub
+    
+ErrorHandler:
+    MsgBox "Đã xảy ra lỗi: " & Err.Description
+End Sub
