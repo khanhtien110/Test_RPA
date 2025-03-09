@@ -1,4 +1,4 @@
-Sub Filter_Payment(path_file As String, path_file_filter As String) 
+Sub Filter_Payment(path_file As String, path_file_filter As String) RPA Nguyen The Duy
     Dim todayDate As Date, yesterday As Date
     todayDate = Date
 
