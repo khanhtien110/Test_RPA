@@ -41,3 +41,5 @@ Sub FilterAmountInDocCurr()
     
     MsgBox "Đã lọc các dòng có Amount in Doc. Curr. > 0."
 End Sub
+
+khanhtien
