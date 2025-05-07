@@ -1,0 +1,29 @@
+{
+    "url": "http://easy.thlone.vn/login?back_url=http%3A%2F%2Feasy.thlone.vn%2F",
+    "id": "vinh.tran@thlone.vn",
+    "pw": "01869768563",
+    "username_selector": "//*[@id=\"username\"]",
+    "password_selector": "//*[@id=\"password\"]",
+    "btnLogin_selector": "//*[@id=\"login_submit_field\"]/td/button",
+    "check_login_success": "//*[@id=\"loggedas\"]/a",
+    "btnLogout_selector": "//*[@id=\"loggedas\"]/a",
+    "check_logout_success": "//*[@id=\"content\"]/div/div",
+    "log_dir": " ",
+    "browser_engine": "edge",
+    "email_account": "duyvinh012399@gmail.com",
+    "email_password": "vawq upul myit icwj",
+    "smtp_server": "smtp.gmail.com",
+    "smtp_port": "587",
+    "recipients": "tung.vu@thlone.vn",
+    "browser_options": {
+        "args": [
+            "--disable-features=AutomaticHttps"
+        ]
+    },
+    "default_body": "Default body",
+    "api_key": "afwSW2ACQwdLjs3Y32tJU37IaosVbI5nLLXSCsJ1pXdnhv9rVVRsYnwBQCQib8Faj1g65AhAY631CnIz2ZKohoIfoPmYC7PHwB7T4eLRtOUyAjZjZ6BegTM7LqPQk",
+    "socket_host": "ws://192.168.100.139:8099",
+    "screenshot_1_dir": "C:\\RPA\\Screenshot_1",
+    "screenshot_2_dir": "C:\\RPA\\Screenshot_2",
+    "screenshot_temp_dir": "C:\\RPA\\Screenshot_Temp"
+}
