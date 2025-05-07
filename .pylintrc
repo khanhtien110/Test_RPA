@@ -1,0 +1,37 @@
+[MASTER]
+ignore=venv,migrations
+jobs=1
+load-plugins=
+extension-pkg-whitelist=
+
+[MESSAGES CONTROL]
+disable=
+    C0114,  ; missing-module-docstring
+    C0115,  ; missing-class-docstring
+    C0116,  ; missing-function-docstring
+    R0903,  ; too-few-public-methods
+    R0801,  ; duplicate-code
+
+[REPORTS]
+output-format=colorized
+reports=no
+score=yes
+
+[FORMAT]
+max-line-length=100
+indent-string='    '
+good-names=i,j,k,ex,Run,_
+
+[DESIGN]
+max-args=5
+max-attributes=10
+max-locals=15
+max-branches=12
+max-statements=50
+
+[TYPECHECK]
+ignored-modules=
+ignored-classes=optparse.Values,thread._local
+
+[LOGGING]
+logging-format-style=old
